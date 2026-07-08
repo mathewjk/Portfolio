@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Mathew Joseph Kayyalackakom</title>
+  <meta name="description" content="Just a guy in Dubai with too many ideas. Some of them are actually good." />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    :root {
+      --bg: #f4f3ef;
+      --surface: #fbfaf7;
+      --ink: #131211;
+      --muted: #6b6a66;
+      --line: rgba(19, 18, 17, 0.14);
+      --accent: #0d9488;
+      --ease: cubic-bezier(0.22, 1, 0.36, 1);
+    }
+
+    html.dark {
+      --bg: #0e0e0d;
+      --surface: #17171500;
+      --surface: #18181600;
+      --surface: #1a1a17;
+      --ink: #f4f3ef;
+      --muted: #9a998f;
+      --line: rgba(244, 243, 239, 0.16);
+      --accent: #2dd4bf;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    ::selection {
+      background: var(--accent);
+      color: #fff;
+    }
+
+    body {
+      font-family: "Inter", -apple-system, "Segoe UI", sans-serif;
+      background: var(--bg);
+      color: var(--ink);
+      min-height: 100vh;
+      -webkit-font-smoothing: antialiased;
+      overflow-x: hidden;
+      transition: background 0.5s var(--ease), color 0.5s var(--ease);
+    }
+
+    .wrap {
+      width: min(1120px, 100%);
+      margin: 0 auto;
+      padding: 0 clamp(24px, 5vw, 64px);
+    }
+
+    /* ---------- flowy cursor-following gradient ---------- */
+    .flow {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      pointer-events: none;
+      overflow: hidden;
+    }
+
+    .blob {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 48vmax;
+      height: 48vmax;
+      border-radius: 50%;
+      filter: blur(64px);
+      opacity: 0.6;
+      mix-blend-mode: multiply;
+      will-change: transform;
+    }
+
+    html.dark .blob {
+      mix-blend-mode: screen;
+      opacity: 0.26;
+    }
+
+    .b1 { background: radial-gradient(circle at center, #ffcf98 0%, transparent 60%); }
+    .b2 { width: 36vmax; height: 36vmax; opacity: 0.5; background: radial-gradient(circle at center, #a9caff 0%, transparent 60%); }
+    .b3 { width: 30vmax; height: 30vmax; opacity: 0.45; background: radial-gradient(circle at center, #f7b0c8 0%, transparent 60%); }
+
+    header, main, footer { position: relative; z-index: 1; }
+
+    @media (prefers-reduced-motion: reduce) {
+      .flow { display: none; }
+    }
+
+    /* ---------- header ---------- */
+    header {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      padding: 26px 0;
+    }
+
+    .brand-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .mark {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: 15px;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+    }
+
+    .theme-toggle {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      width: 34px;
+      height: 34px;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      background: transparent;
+      color: var(--ink);
+      cursor: pointer;
+      transition: border-color 0.3s var(--ease), transform 0.3s var(--ease);
+    }
+
+    .theme-toggle:hover { border-color: var(--accent); transform: rotate(15deg); }
+    .theme-toggle svg { width: 16px; height: 16px; }
+    .theme-toggle .moon { display: none; }
+    html.dark .theme-toggle .sun { display: none; }
+    html.dark .theme-toggle .moon { display: block; }
+
+    .locations {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      text-align: right;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+
+    /* ---------- hero ---------- */
+    .hero {
+      min-height: calc(100vh - 92px);
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 40px 0 80px;
+    }
+
+    .reveal { overflow: hidden; }
+    .reveal > * {
+      display: block;
+      transform: translateY(110%);
+      animation: reveal 1s var(--ease) forwards;
+    }
+
+    .eyebrow {
+      font-size: clamp(13px, 1.4vw, 15px);
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: clamp(16px, 2.5vw, 28px);
+    }
+
+    h1 {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: clamp(42px, 9vw, 128px);
+      line-height: 0.98;
+      letter-spacing: -0.03em;
+      text-transform: uppercase;
+    }
+
+    /* rotating hero tagline */
+    .tagline-rotator {
+      margin-top: clamp(28px, 4vw, 44px);
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(19px, 2.8vw, 32px);
+      font-weight: 500;
+      letter-spacing: -0.01em;
+      height: 1.4em;
+      overflow: hidden;
+    }
+
+    .tagline-rotator span { display: block; line-height: 1.4; will-change: transform; }
+    .tagline-rotator span.out { animation: roleOut 0.5s var(--ease) forwards; }
+    .tagline-rotator span.in { animation: roleIn 0.5s var(--ease) forwards; }
+
+    .cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      align-self: flex-start;
+      margin-top: clamp(30px, 5vw, 52px);
+      font-family: "Inter", sans-serif;
+      font-size: 15px;
+      font-weight: 500;
+      color: #fff;
+      text-decoration: none;
+      background: var(--accent);
+      border-radius: 999px;
+      padding: 15px 28px;
+      transition: transform 0.35s var(--ease), box-shadow 0.35s var(--ease), background 0.35s var(--ease);
+    }
+
+    .cta:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 12px 30px -10px var(--accent);
+    }
+
+    .cta svg { width: 16px; height: 16px; transition: transform 0.35s var(--ease); }
+    .cta:hover svg { transform: translateX(4px); }
+
+    /* ---------- generic section ---------- */
+    section.block { padding: clamp(64px, 10vw, 120px) 0; }
+
+    .sec-label {
+      display: flex;
+      align-items: baseline;
+      gap: 14px;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 12px;
+    }
+
+    .sec-label .num { color: var(--accent); font-family: "Space Grotesk", sans-serif; }
+
+    .sec-title {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: clamp(30px, 5vw, 56px);
+      letter-spacing: -0.02em;
+      line-height: 1.02;
+      margin-bottom: clamp(28px, 4vw, 48px);
+    }
+
+    .sec-sub {
+      color: var(--muted);
+      font-size: clamp(15px, 1.8vw, 18px);
+      margin-top: -18px;
+      margin-bottom: clamp(28px, 4vw, 48px);
+    }
+
+    /* Now list */
+    .now-list { display: grid; gap: 4px; }
+    .now-item {
+      display: flex;
+      gap: 18px;
+      padding: 22px 4px;
+      border-top: 1px solid var(--line);
+      font-size: clamp(16px, 2vw, 20px);
+      line-height: 1.5;
+    }
+    .now-item:last-child { border-bottom: 1px solid var(--line); }
+    .now-item::before {
+      content: "";
+      flex: none;
+      width: 9px;
+      height: 9px;
+      margin-top: 0.5em;
+      border-radius: 50%;
+      background: var(--accent);
+    }
+
+    /* Built cards */
+    .cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 18px; }
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      padding: 28px;
+      transition: transform 0.4s var(--ease), border-color 0.4s var(--ease);
+    }
+    .card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    .card h3 {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 21px;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      margin-bottom: 12px;
+    }
+    .card p { color: var(--muted); font-size: 15px; line-height: 1.6; }
+
+    /* Facts grid */
+    .facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
+    .fact {
+      display: flex;
+      gap: 16px;
+      padding: 22px 8px;
+      border-top: 1px solid var(--line);
+      font-size: clamp(15px, 1.7vw, 17px);
+      line-height: 1.5;
+    }
+    .fact .fnum {
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      color: var(--accent);
+      font-size: 14px;
+      flex: none;
+      width: 26px;
+      padding-top: 2px;
+    }
+
+    /* Toolkit */
+    .tools {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: auto auto;
+      grid-auto-flow: column;
+      gap: 12px;
+      align-items: start;
+      justify-items: start;
+    }
+    .tool {
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 12px 22px;
+      font-size: 15px;
+      transition: border-color 0.3s var(--ease), color 0.3s var(--ease);
+    }
+    .tool:hover { border-color: var(--accent); color: var(--accent); }
+    .tool b { font-weight: 600; }
+
+    /* FAQ */
+    .faq { display: grid; gap: 2px; }
+    .qa { padding: 24px 4px; border-top: 1px solid var(--line); }
+    .qa:last-child { border-bottom: 1px solid var(--line); }
+    .qa h3 {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: 19px;
+      font-weight: 500;
+      margin-bottom: 8px;
+    }
+    .qa p { color: var(--muted); font-size: 16px; line-height: 1.6; }
+
+    /* Contact */
+    .contact-prompt {
+      font-family: "Space Grotesk", sans-serif;
+      font-size: clamp(22px, 3.4vw, 40px);
+      font-weight: 500;
+      letter-spacing: -0.02em;
+      line-height: 1.2;
+      max-width: 18ch;
+      margin-bottom: clamp(28px, 4vw, 44px);
+    }
+
+    .links { display: flex; flex-wrap: wrap; gap: 12px; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 9px;
+      font-size: 14px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      color: var(--ink);
+      text-decoration: none;
+      border: 1px solid var(--line);
+      border-radius: 999px;
+      padding: 13px 24px;
+      transition: background 0.35s var(--ease), color 0.35s var(--ease),
+        border-color 0.35s var(--ease), transform 0.35s var(--ease);
+    }
+    .btn svg { width: 16px; height: 16px; transition: transform 0.35s var(--ease); }
+    .btn:hover { background: var(--ink); color: var(--bg); border-color: var(--ink); transform: translateY(-2px); }
+    .btn:hover svg { transform: rotate(-8deg) scale(1.1); }
+
+    /* softer, dimmer hover fill in dark mode */
+    html.dark .btn:hover {
+      background: #c4c3bd;
+      border-color: #c4c3bd;
+      color: #131211;
+    }
+
+    /* dark text reads better on the brighter teal in dark mode */
+    html.dark .cta { color: #06231f; }
+
+    /* footer */
+    footer {
+      padding: 28px 0;
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 12px;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: var(--muted);
+    }
+
+    /* scroll reveal */
+    .up { opacity: 0; transform: translateY(28px); transition: opacity 0.8s var(--ease), transform 0.8s var(--ease); }
+    .up.in { opacity: 1; transform: translateY(0); }
+
+    .fade-in { opacity: 0; transform: translateY(24px); animation: fadeUp 0.9s var(--ease) forwards; }
+
+    @keyframes reveal { to { transform: translateY(0); } }
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+    @keyframes roleOut { from { transform: translateY(0); } to { transform: translateY(-110%); } }
+    @keyframes roleIn { from { transform: translateY(110%); } to { transform: translateY(0); } }
+
+    @media (max-width: 640px) {
+      .facts { grid-template-columns: 1fr; }
+      .tools { grid-template-columns: 1fr; grid-auto-flow: row; }
+    }
+  </style>
+</head>
+<body>
+  <div class="flow" aria-hidden="true">
+    <span class="blob b1"></span>
+    <span class="blob b2"></span>
+    <span class="blob b3"></span>
+  </div>
+
+  <div class="wrap">
+    <header>
+      <div class="brand-row fade-in" style="animation-delay: 0.9s">
+        <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark mode">
+          <svg class="sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round">
+            <circle cx="12" cy="12" r="4" />
+            <path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M19.1 4.9l-1.4 1.4M6.3 17.7l-1.4 1.4" />
+          </svg>
+          <svg class="moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z" />
+          </svg>
+        </button>
+      </div>
+      <div class="locations fade-in" style="animation-delay: 1s">
+        <span>Dubai</span>
+        <span>Bangalore</span>
+        <span>Trivandrum</span>
+      </div>
+    </header>
+
+    <main>
+      <!-- HERO -->
+      <section class="hero">
+        <p class="eyebrow">
+          <span class="reveal"><span style="animation-delay: 0.1s">Hello, I am</span></span>
+        </p>
+        <h1>
+          <span class="reveal"><span style="animation-delay: 0.2s">Mathew</span></span>
+          <span class="reveal"><span style="animation-delay: 0.32s">Joseph</span></span>
+          <span class="reveal"><span style="animation-delay: 0.44s">Kayyalackakom</span></span>
+        </h1>
+        <div class="tagline-rotator fade-in" style="animation-delay: 0.8s">
+          <span id="tagline">Just a guy in Dubai with too many ideas.</span>
+        </div>
+        <a class="cta fade-in" href="#contact" style="animation-delay: 0.95s">
+          Say hi — I'm friendly
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M5 12h14M13 6l6 6-6 6" />
+          </svg>
+        </a>
+      </section>
+
+      <!-- NOW -->
+      <section class="block" id="now">
+        <div class="sec-label up"><span class="num">01</span><span>Now</span></div>
+        <h2 class="sec-title up">What I'm currently up to</h2>
+        <div class="now-list">
+          <div class="now-item up">Building a personal budgeting app because Excel and I needed to see other people.</div>
+          <div class="now-item up">Sticking to a 5-day gym plan (abs, forearms, calves — don't ask, it's strategic). Wednesdays are for swimming and steam.</div>
+          <div class="now-item up">Reading about venture capital and pretending I'll casually bump into an investor someday.</div>
+          <div class="now-item up">Plotting long-term life goals with the seriousness of a Bond villain and the patience of a monk.</div>
+        </div>
+      </section>
+
+      <!-- BUILT -->
+      <section class="block" id="built">
+        <div class="sec-label up"><span class="num">02</span><span>Things I've Built</span></div>
+        <h2 class="sec-title up">A few things I've shipped</h2>
+        <div class="cards">
+          <div class="card up">
+            <h3>Making Today</h3>
+            <p>A productivity SaaS I co-founded with an all-Malayali crew. Launched on Product Hunt, crossed 1,000 users in the first week. I do everything the CEO doesn't want to.</p>
+          </div>
+          <div class="card up">
+            <h3>A budgeting app <span style="color:var(--accent)">(in progress)</span></h3>
+            <p>Expense tracking, goal buckets, what-if analysis. Currently arguing with myself about the tech stack.</p>
+          </div>
+          <div class="card up">
+            <h3>A WhatsApp financial community</h3>
+            <p>Teaching mutual funds and SIPs to a Malayalam-speaking audience, in English and Manglish. Yes, Manglish is a language. Fight me.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- FACTS -->
+      <section class="block" id="about">
+        <div class="sec-label up"><span class="num">03</span><span>Fun Facts</span></div>
+        <h2 class="sec-title up">10 things about me</h2>
+        <div class="facts">
+          <div class="fact up"><span class="fnum">01</span><span>I own <b>DearIndia.com</b> — registered in 1998. Older than most startups, and aging better too. Technically it's my dad's, so it's as old as me.</span></div>
+          <div class="fact up"><span class="fnum">02</span><span>I live in Dubai but my ideas commute globally.</span></div>
+          <div class="fact up"><span class="fnum">03</span><span>I've made more spreadsheets than friends. The spreadsheets are more reliable.</span></div>
+          <div class="fact up"><span class="fnum">04</span><span>I plan my finances in "buckets." My buckets have buckets.</span></div>
+          <div class="fact up"><span class="fnum">05</span><span>My idea of a wild Wednesday is swimming followed by a steam room.</span></div>
+          <div class="fact up"><span class="fnum">06</span><span>I believe every problem can be solved with a well-structured table.</span></div>
+          <div class="fact up"><span class="fnum">07</span><span>I once pitched an idea to one of the biggest companies in India. Cold. Because why not.</span></div>
+          <div class="fact up"><span class="fnum">08</span><span>Long-term thinker. I'm already nostalgic about 2030.</span></div>
+          <div class="fact up"><span class="fnum">09</span><span>Malayali by blood, optimist by choice, analyst by accident.</span></div>
+          <div class="fact up"><span class="fnum">10</span><span>Currently accepting compliments and coffee recommendations.</span></div>
+        </div>
+      </section>
+
+      <!-- TOOLKIT -->
+      <section class="block" id="toolkit">
+        <div class="sec-label up"><span class="num">04</span><span>Toolkit</span></div>
+        <h2 class="sec-title up">What I use</h2>
+        <div class="tools">
+          <span class="tool up"><b>Claude</b> — obviously. Hi, if you're reading this in the source.</span>
+          <span class="tool up"><b>Excel</b> — my first love, soon to be replaced by my own app. It doesn't know yet.</span>
+          <span class="tool up"><b>Notion-adjacent chaos</b> — for everything else.</span>
+          <span class="tool up"><b>Power BI</b> — for all my visuals.</span>
+        </div>
+      </section>
+
+      <!-- FAQ -->
+      <section class="block" id="faq">
+        <div class="sec-label up"><span class="num">05</span><span>FAQ</span></div>
+        <h2 class="sec-title up">Questions people ask</h2>
+        <div class="faq">
+          <div class="qa up">
+            <h3>Why the website?</h3>
+            <p>Everyone deserves one corner of the internet where they make the rules.</p>
+          </div>
+          <div class="qa up">
+            <h3>What's with DearIndia.com?</h3>
+            <p>A domain from 1998 with a story. Ask me over coffee.</p>
+          </div>
+          <div class="qa up">
+            <h3>Are you actually friendly?</h3>
+            <p>Suspiciously so.</p>
+          </div>
+        </div>
+      </section>
+
+      <!-- CONTACT -->
+      <section class="block" id="contact">
+        <div class="sec-label up"><span class="num">06</span><span>Contact</span></div>
+        <p class="contact-prompt up">Tell me something interesting. Or just say hi. Low bar.</p>
+        <div class="links up">
+          <a class="btn" href="mailto:mathewjoskay@gmail.com">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="5" width="18" height="14" rx="2.5" />
+              <path d="M3 7.5l9 6 9-6" stroke-linecap="round" stroke-linejoin="round" />
+            </svg>
+            Email
+          </a>
+          <a class="btn" href="https://www.linkedin.com/in/mathewjosephkay" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="currentColor" stroke="none">
+              <path d="M4.98 3.5a2.5 2.5 0 1 1-.02 5 2.5 2.5 0 0 1 .02-5zM3 9h4v12H3zM9.5 9h3.8v1.7h.05c.53-.95 1.83-1.95 3.77-1.95 4.03 0 4.88 2.5 4.88 5.74V21h-4v-5.6c0-1.34-.03-3.06-1.97-3.06-1.97 0-2.27 1.45-2.27 2.96V21h-4z" />
+            </svg>
+            LinkedIn
+          </a>
+          <a class="btn" href="https://www.instagram.com/mathewjosephk_/" target="_blank" rel="noopener">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+              <rect x="3" y="3" width="18" height="18" rx="5" />
+              <circle cx="12" cy="12" r="4" />
+              <circle cx="17.2" cy="6.8" r="1.1" fill="currentColor" stroke="none" />
+            </svg>
+            Instagram
+          </a>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <span>© 2026 Mathew Joseph Kayyalackakom</span>
+      <span>Made in Dubai</span>
+    </footer>
+  </div>
+
+  <script>
+    // ---------- theme ----------
+    const root = document.documentElement;
+    const saved = localStorage.getItem("theme");
+    if (saved === "dark" || (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+      root.classList.add("dark");
+    }
+    document.getElementById("themeToggle").addEventListener("click", () => {
+      root.classList.toggle("dark");
+      localStorage.setItem("theme", root.classList.contains("dark") ? "dark" : "light");
+    });
+
+    // ---------- flowy cursor-following gradient ----------
+    (function () {
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+      const blobs = [
+        { el: document.querySelector(".b1"), x: 0, y: 0, ease: 0.08 },
+        { el: document.querySelector(".b2"), x: 0, y: 0, ease: 0.13 },
+        { el: document.querySelector(".b3"), x: 0, y: 0, ease: 0.19 },
+      ];
+      let mx = window.innerWidth / 2, my = window.innerHeight * 0.4;
+      blobs.forEach((b) => { b.x = mx; b.y = my; });
+      window.addEventListener("pointermove", (e) => { mx = e.clientX; my = e.clientY; });
+      (function frame() {
+        for (const b of blobs) {
+          b.x += (mx - b.x) * b.ease;
+          b.y += (my - b.y) * b.ease;
+          b.el.style.transform = `translate(${b.x}px, ${b.y}px) translate(-50%, -50%)`;
+        }
+        requestAnimationFrame(frame);
+      })();
+    })();
+
+    // ---------- rotating hero tagline ----------
+    const taglines = [
+      "Just a guy in Dubai with too many ideas.",
+      "Some of them are actually good.",
+      "Malayali by blood, optimist by choice, analyst by accident.",
+    ];
+    const tEl = document.getElementById("tagline");
+    let ti = 0;
+    setInterval(() => {
+      tEl.classList.remove("in");
+      tEl.classList.add("out");
+      setTimeout(() => {
+        ti = (ti + 1) % taglines.length;
+        tEl.textContent = taglines[ti];
+        tEl.classList.remove("out");
+        tEl.classList.add("in");
+      }, 500);
+    }, 3400);
+
+    // ---------- scroll reveal ----------
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach((e) => {
+        if (e.isIntersecting) { e.target.classList.add("in"); io.unobserve(e.target); }
+      });
+    }, { threshold: 0.15 });
+    document.querySelectorAll(".up").forEach((el, i) => {
+      el.style.transitionDelay = (i % 5) * 0.05 + "s";
+      io.observe(el);
+    });
+  </script>
+</body>
+</html>
