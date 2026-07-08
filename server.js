@@ -28,6 +28,8 @@ http
           ? "text/javascript"
           : ext === ".svg"
           ? "image/svg+xml"
+          : ext === ".png"
+          ? "image/png"
           : "application/octet-stream";
       res.writeHead(200, { "Content-Type": type });
       res.end(data);
