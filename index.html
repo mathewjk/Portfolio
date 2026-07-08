@@ -19,8 +19,8 @@
       var r = document.documentElement;
       r.classList.add("loading");
       try {
-        var s = localStorage.getItem("theme");
-        if (s === "dark" || (!s && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+        // Light is the default; dark only if the visitor explicitly chose it.
+        if (localStorage.getItem("theme") === "dark") {
           r.classList.add("dark");
         }
       } catch (e) {}
