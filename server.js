@@ -26,6 +26,8 @@ http
           ? "text/css"
           : ext === ".js"
           ? "text/javascript"
+          : ext === ".svg"
+          ? "image/svg+xml"
           : "application/octet-stream";
       res.writeHead(200, { "Content-Type": type });
       res.end(data);

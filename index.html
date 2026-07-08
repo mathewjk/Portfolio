@@ -5,12 +5,27 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Mathew Joseph Kayyalackakom</title>
   <meta name="description" content="Just a guy in Dubai with too many ideas. Some of them are actually good." />
+  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
+  <link rel="apple-touch-icon" href="favicon.svg" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
     href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=Inter:wght@400;500&display=swap"
     rel="stylesheet"
   />
+  <script>
+    // Set loading + theme before first paint to avoid flashes.
+    (function () {
+      var r = document.documentElement;
+      r.classList.add("loading");
+      try {
+        var s = localStorage.getItem("theme");
+        if (s === "dark" || (!s && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
+          r.classList.add("dark");
+        }
+      } catch (e) {}
+    })();
+  </script>
   <style>
     :root {
       --bg: #f4f3ef;
@@ -63,6 +78,40 @@
       margin: 0 auto;
       padding: 0 clamp(24px, 5vw, 64px);
     }
+
+    /* ---------- intro loader ---------- */
+    #loader {
+      position: fixed;
+      inset: 0;
+      z-index: 9999;
+      background: var(--bg);
+      display: flex;
+      align-items: flex-end;
+      justify-content: flex-end;
+      padding: clamp(24px, 5vw, 72px);
+      transition: transform 0.9s var(--ease);
+      will-change: transform;
+    }
+    #loader.done { transform: translateY(-100%); }
+
+    .loader-count {
+      display: flex;
+      align-items: baseline;
+      font-family: "Space Grotesk", sans-serif;
+      font-weight: 700;
+      font-size: clamp(64px, 15vw, 200px);
+      letter-spacing: -0.04em;
+      line-height: 0.85;
+      color: var(--ink);
+    }
+    .loader-count .pct { font-size: 0.34em; color: var(--muted); margin-left: 0.12em; }
+
+    /* hold hero animations + lock scroll while loading */
+    html.loading { overflow: hidden; }
+    html.loading .reveal > *,
+    html.loading .fade-in { animation-play-state: paused; }
+
+    .water-defs { position: absolute; pointer-events: none; }
 
     /* ---------- flowy cursor-following gradient ---------- */
     .flow {
@@ -188,7 +237,29 @@
       line-height: 0.98;
       letter-spacing: -0.03em;
       text-transform: uppercase;
+      cursor: default;
     }
+
+    /* watery hover: a crisp base with a rippled copy revealed only under the cursor */
+    .hero-name { position: relative; width: max-content; max-width: 100%; }
+    .hero-name h1 { margin: 0; }
+
+    .name-ripple {
+      position: absolute;
+      inset: 0;
+      pointer-events: none;
+      color: var(--ink);
+      filter: url(#water);
+      opacity: 0;
+      transition: opacity 0.4s var(--ease);
+      -webkit-mask: radial-gradient(circle 120px at var(--mx, -600px) var(--my, -600px),
+        #000 0%, #000 24%, rgba(0, 0, 0, 0) 66%);
+      mask: radial-gradient(circle 120px at var(--mx, -600px) var(--my, -600px),
+        #000 0%, #000 24%, rgba(0, 0, 0, 0) 66%);
+    }
+    .hero-name.stir .name-ripple { opacity: 1; }
+    /* the ripple copy is static — it mirrors the base name's final position */
+    .name-ripple .reveal > * { transform: none; animation: none; }
 
     /* rotating hero tagline */
     .tagline-rotator {
@@ -197,6 +268,7 @@
       font-size: clamp(19px, 2.8vw, 32px);
       font-weight: 500;
       letter-spacing: -0.01em;
+      color: var(--muted);
       height: 1.4em;
       overflow: hidden;
     }
@@ -204,6 +276,11 @@
     .tagline-rotator span { display: block; line-height: 1.4; will-change: transform; }
     .tagline-rotator span.out { animation: roleOut 0.5s var(--ease) forwards; }
     .tagline-rotator span.in { animation: roleIn 0.5s var(--ease) forwards; }
+
+    /* long lines wrap to two rows on smaller screens */
+    @media (max-width: 760px) {
+      .tagline-rotator { height: 2.8em; }
+    }
 
     .cta {
       display: inline-flex;
@@ -428,6 +505,26 @@
   </style>
 </head>
 <body>
+  <!-- intro loader -->
+  <div id="loader" aria-hidden="true">
+    <div class="loader-count"><span id="count">0</span><span class="pct">%</span></div>
+  </div>
+
+  <!-- watery displacement filter for the hero name -->
+  <svg class="water-defs" width="0" height="0" aria-hidden="true">
+    <filter id="water" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence id="waterTurb" type="fractalNoise" baseFrequency="0.011 0.013"
+        numOctaves="2" seed="6" result="noise">
+        <animate attributeName="baseFrequency" dur="16s" repeatCount="indefinite"
+          calcMode="spline" keyTimes="0;0.5;1"
+          keySplines="0.45 0 0.55 1;0.45 0 0.55 1"
+          values="0.011 0.013;0.015 0.017;0.011 0.013" />
+      </feTurbulence>
+      <feDisplacementMap id="waterDisp" in="SourceGraphic" in2="noise" scale="14"
+        xChannelSelector="R" yChannelSelector="G" />
+    </filter>
+  </svg>
+
   <div class="flow" aria-hidden="true">
     <span class="blob b1"></span>
     <span class="blob b2"></span>
@@ -460,16 +557,23 @@
         <p class="eyebrow">
           <span class="reveal"><span style="animation-delay: 0.1s">Hello, I am</span></span>
         </p>
-        <h1>
-          <span class="reveal"><span style="animation-delay: 0.2s">Mathew</span></span>
-          <span class="reveal"><span style="animation-delay: 0.32s">Joseph</span></span>
-          <span class="reveal"><span style="animation-delay: 0.44s">Kayyalackakom</span></span>
-        </h1>
+        <div class="hero-name">
+          <h1 class="name-base">
+            <span class="reveal"><span style="animation-delay: 0.2s">Mathew</span></span>
+            <span class="reveal"><span style="animation-delay: 0.32s">Joseph</span></span>
+            <span class="reveal"><span style="animation-delay: 0.44s">Kayyalackakom</span></span>
+          </h1>
+          <h1 class="name-ripple" aria-hidden="true">
+            <span class="reveal"><span>Mathew</span></span>
+            <span class="reveal"><span>Joseph</span></span>
+            <span class="reveal"><span>Kayyalackakom</span></span>
+          </h1>
+        </div>
         <div class="tagline-rotator fade-in" style="animation-delay: 0.8s">
-          <span id="tagline">Just a guy in Dubai with too many ideas.</span>
+          <span id="tagline">Based in Dubai. Powered by big plans and small coffees.</span>
         </div>
         <a class="cta fade-in" href="#contact" style="animation-delay: 0.95s">
-          Say hi — I'm friendly
+          Say hi
           <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
             <path d="M5 12h14M13 6l6 6-6 6" />
           </svg>
@@ -481,10 +585,10 @@
         <div class="sec-label up"><span class="num">01</span><span>Now</span></div>
         <h2 class="sec-title up">What I'm currently up to</h2>
         <div class="now-list">
-          <div class="now-item up">Building a personal budgeting app because Excel and I needed to see other people.</div>
-          <div class="now-item up">Sticking to a 5-day gym plan (abs, forearms, calves — don't ask, it's strategic). Wednesdays are for swimming and steam.</div>
-          <div class="now-item up">Reading about venture capital and pretending I'll casually bump into an investor someday.</div>
-          <div class="now-item up">Plotting long-term life goals with the seriousness of a Bond villain and the patience of a monk.</div>
+          <div class="now-item up">Building a personal budgeting app to replace my trusty old Excel sheet.</div>
+          <div class="now-item up">Following a 5-day gym routine, with Wednesdays reserved for swimming.</div>
+          <div class="now-item up">Reading and learning about venture capital and startups.</div>
+          <div class="now-item up">Thinking long-term — about career, life, and everything in between.</div>
         </div>
       </section>
 
@@ -495,34 +599,31 @@
         <div class="cards">
           <div class="card up">
             <h3>Making Today</h3>
-            <p>A productivity SaaS I co-founded with an all-Malayali crew. Launched on Product Hunt, crossed 1,000 users in the first week. I do everything the CEO doesn't want to.</p>
+            <p>A productivity SaaS where I was part of the initial team. Launched on Product Hunt and crossed 1,000 users in the first week. I've handled everything from customer support to analytics to newsletters.</p>
           </div>
           <div class="card up">
             <h3>A budgeting app <span style="color:var(--accent)">(in progress)</span></h3>
-            <p>Expense tracking, goal buckets, what-if analysis. Currently arguing with myself about the tech stack.</p>
+            <p>Expense tracking, savings goals, and what-if projections. Currently deciding on the tech stack.</p>
           </div>
           <div class="card up">
-            <h3>A WhatsApp financial community</h3>
-            <p>Teaching mutual funds and SIPs to a Malayalam-speaking audience, in English and Manglish. Yes, Manglish is a language. Fight me.</p>
+            <h3>A WhatsApp financial education community</h3>
+            <p>Helping people understand mutual funds and personal finance, one message at a time.</p>
           </div>
         </div>
       </section>
 
       <!-- FACTS -->
       <section class="block" id="about">
-        <div class="sec-label up"><span class="num">03</span><span>Fun Facts</span></div>
-        <h2 class="sec-title up">10 things about me</h2>
+        <div class="sec-label up"><span class="num">03</span><span>About Me</span></div>
+        <h2 class="sec-title up">A few things about me</h2>
         <div class="facts">
-          <div class="fact up"><span class="fnum">01</span><span>I own <b>DearIndia.com</b> — registered in 1998. Older than most startups, and aging better too. Technically it's my dad's, so it's as old as me.</span></div>
-          <div class="fact up"><span class="fnum">02</span><span>I live in Dubai but my ideas commute globally.</span></div>
-          <div class="fact up"><span class="fnum">03</span><span>I've made more spreadsheets than friends. The spreadsheets are more reliable.</span></div>
-          <div class="fact up"><span class="fnum">04</span><span>I plan my finances in "buckets." My buckets have buckets.</span></div>
-          <div class="fact up"><span class="fnum">05</span><span>My idea of a wild Wednesday is swimming followed by a steam room.</span></div>
-          <div class="fact up"><span class="fnum">06</span><span>I believe every problem can be solved with a well-structured table.</span></div>
-          <div class="fact up"><span class="fnum">07</span><span>I once pitched an idea to one of the biggest companies in India. Cold. Because why not.</span></div>
-          <div class="fact up"><span class="fnum">08</span><span>Long-term thinker. I'm already nostalgic about 2030.</span></div>
-          <div class="fact up"><span class="fnum">09</span><span>Malayali by blood, optimist by choice, analyst by accident.</span></div>
-          <div class="fact up"><span class="fnum">10</span><span>Currently accepting compliments and coffee recommendations.</span></div>
+          <div class="fact up"><span class="fnum">01</span><span>I live in Dubai, but my ideas tend to travel.</span></div>
+          <div class="fact up"><span class="fnum">02</span><span>I genuinely enjoy a well-structured spreadsheet.</span></div>
+          <div class="fact up"><span class="fnum">03</span><span>I plan my finances in buckets — it works better than it sounds.</span></div>
+          <div class="fact up"><span class="fnum">04</span><span>My ideal Wednesday: a swim followed by a steam room.</span></div>
+          <div class="fact up"><span class="fnum">05</span><span>I believe most problems get simpler once you put them in a table.</span></div>
+          <div class="fact up"><span class="fnum">06</span><span>Long-term thinker. I'd rather build slowly than burn out quickly.</span></div>
+          <div class="fact up"><span class="fnum">07</span><span>Always up for a good coffee recommendation.</span></div>
         </div>
       </section>
 
@@ -531,10 +632,10 @@
         <div class="sec-label up"><span class="num">04</span><span>Toolkit</span></div>
         <h2 class="sec-title up">What I use</h2>
         <div class="tools">
-          <span class="tool up"><b>Claude</b> — obviously. Hi, if you're reading this in the source.</span>
-          <span class="tool up"><b>Excel</b> — my first love, soon to be replaced by my own app. It doesn't know yet.</span>
-          <span class="tool up"><b>Notion-adjacent chaos</b> — for everything else.</span>
+          <span class="tool up"><b>Claude</b> — for thinking out loud.</span>
+          <span class="tool up"><b>Excel</b> — my longest professional relationship.</span>
           <span class="tool up"><b>Power BI</b> — for all my visuals.</span>
+          <span class="tool up"><b>Notion</b> — for everything else.</span>
         </div>
       </section>
 
@@ -548,12 +649,8 @@
             <p>Everyone deserves one corner of the internet where they make the rules.</p>
           </div>
           <div class="qa up">
-            <h3>What's with DearIndia.com?</h3>
-            <p>A domain from 1998 with a story. Ask me over coffee.</p>
-          </div>
-          <div class="qa up">
             <h3>Are you actually friendly?</h3>
-            <p>Suspiciously so.</p>
+            <p>Yes. Try me.</p>
           </div>
         </div>
       </section>
@@ -561,7 +658,7 @@
       <!-- CONTACT -->
       <section class="block" id="contact">
         <div class="sec-label up"><span class="num">06</span><span>Contact</span></div>
-        <p class="contact-prompt up">Tell me something interesting. Or just say hi. Low bar.</p>
+        <p class="contact-prompt up">Tell me something interesting. Or just say hi.</p>
         <div class="links up">
           <a class="btn" href="mailto:mathewjoskay@gmail.com">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
@@ -595,16 +692,84 @@
   </div>
 
   <script>
-    // ---------- theme ----------
+    // ---------- theme (initial state set in <head> to avoid flash) ----------
     const root = document.documentElement;
-    const saved = localStorage.getItem("theme");
-    if (saved === "dark" || (!saved && window.matchMedia("(prefers-color-scheme: dark)").matches)) {
-      root.classList.add("dark");
-    }
     document.getElementById("themeToggle").addEventListener("click", () => {
       root.classList.toggle("dark");
       localStorage.setItem("theme", root.classList.contains("dark") ? "dark" : "light");
     });
+
+    // ---------- intro loader: count up, then wipe away ----------
+    (function () {
+      const loader = document.getElementById("loader");
+      const countEl = document.getElementById("count");
+      const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+      const finish = () => {
+        loader.classList.add("done");
+        root.classList.remove("loading");
+        setTimeout(() => loader.remove(), 1000);
+      };
+      if (reduce) { countEl.textContent = "100"; finish(); return; }
+      const start = performance.now(), dur = 1500;
+      (function tick(now) {
+        const p = Math.min((now - start) / dur, 1);
+        const eased = 1 - Math.pow(1 - p, 3); // easeOutCubic
+        countEl.textContent = Math.round(eased * 100);
+        if (p < 1) requestAnimationFrame(tick);
+        else setTimeout(finish, 250);
+      })(start);
+    })();
+
+    // ---------- watery hover: reveal the rippled copy only under the cursor ----------
+    (function () {
+      const wrap = document.querySelector(".hero-name");
+      const ripple = document.querySelector(".name-ripple");
+      if (!wrap || !ripple) return;
+      if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) {
+        ripple.remove();
+        return;
+      }
+
+      // eased follow so the ripple glides smoothly instead of snapping
+      let tx = -600, ty = -600, cx = -600, cy = -600, inside = false, raf = 0;
+
+      const tick = () => {
+        cx += (tx - cx) * 0.2;
+        cy += (ty - cy) * 0.2;
+        ripple.style.setProperty("--mx", cx.toFixed(1) + "px");
+        ripple.style.setProperty("--my", cy.toFixed(1) + "px");
+        if (inside || Math.abs(tx - cx) > 0.5 || Math.abs(ty - cy) > 0.5) {
+          raf = requestAnimationFrame(tick);
+        } else {
+          raf = 0;
+        }
+      };
+
+      window.addEventListener("pointermove", (e) => {
+        const r = wrap.getBoundingClientRect();
+        const m = 90; // start rippling a little before the cursor reaches the letters
+        inside =
+          e.clientX >= r.left - m && e.clientX <= r.right + m &&
+          e.clientY >= r.top - m && e.clientY <= r.bottom + m;
+        wrap.classList.toggle("stir", inside);
+        if (inside) {
+          tx = e.clientX - r.left;
+          ty = e.clientY - r.top;
+        } else {
+          tx = -600;
+          ty = -600;
+        }
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+
+      window.addEventListener("pointerleave", () => {
+        inside = false;
+        wrap.classList.remove("stir");
+        tx = -600;
+        ty = -600;
+        if (!raf) raf = requestAnimationFrame(tick);
+      });
+    })();
 
     // ---------- flowy cursor-following gradient ----------
     (function () {
@@ -629,9 +794,13 @@
 
     // ---------- rotating hero tagline ----------
     const taglines = [
-      "Just a guy in Dubai with too many ideas.",
-      "Some of them are actually good.",
-      "Malayali by blood, optimist by choice, analyst by accident.",
+      "Based in Dubai. Powered by big plans and small coffees.",
+      "Building things, one spreadsheet at a time.",
+      "Thinking long-term since forever.",
+      "Ideas by day, gym by evening.",
+      "Simple plans, done properly.",
+      "Always learning. Occasionally swimming.",
+      "Making sense of numbers, and everything else.",
     ];
     const tEl = document.getElementById("tagline");
     let ti = 0;
