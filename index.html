@@ -371,7 +371,11 @@
       transition: transform 0.4s var(--ease), border-color 0.4s var(--ease);
     }
     .card:hover { transform: translateY(-4px); border-color: var(--accent); }
+    a.card { display: block; text-decoration: none; color: inherit; }
     .card h3 {
+      display: flex;
+      align-items: center;
+      gap: 8px;
       font-family: "Space Grotesk", sans-serif;
       font-size: 21px;
       font-weight: 700;
@@ -379,6 +383,25 @@
       margin-bottom: 12px;
     }
     .card p { color: var(--muted); font-size: 15px; line-height: 1.6; }
+
+    /* subtle TYB logo mark beside the title */
+    .tyb-mark {
+      width: 22px;
+      height: 22px;
+      border-radius: 6px;
+      flex: none;
+    }
+
+    /* small "opens externally" cue on clickable cards */
+    .card-go {
+      margin-left: auto;
+      font-size: 15px;
+      color: var(--muted);
+      opacity: 0;
+      transform: translate(-3px, 3px);
+      transition: opacity 0.3s var(--ease), transform 0.3s var(--ease), color 0.3s var(--ease);
+    }
+    a.card:hover .card-go { opacity: 1; transform: translate(0, 0); color: var(--accent); }
 
     /* Facts grid */
     .facts { display: grid; grid-template-columns: repeat(2, 1fr); gap: 2px; }
@@ -597,14 +620,14 @@
         <div class="sec-label up"><span class="num">02</span><span>Things I've Built</span></div>
         <h2 class="sec-title up">A few things I've shipped</h2>
         <div class="cards">
-          <div class="card up">
-            <h3>Making Today</h3>
+          <a class="card up" href="https://www.producthunt.com/products/making-today" target="_blank" rel="noopener">
+            <h3>Making Today <span class="card-go" aria-hidden="true">↗</span></h3>
             <p>A productivity SaaS where I was part of the initial team. Launched on Product Hunt and crossed 1,000 users in the first week. I've handled everything from customer support to analytics to newsletters.</p>
-          </div>
-          <div class="card up">
-            <h3>A budgeting app <span style="color:var(--accent)">(in progress)</span></h3>
+          </a>
+          <a class="card up" href="https://www.trackyourbeans.com/" target="_blank" rel="noopener">
+            <h3><img class="tyb-mark" src="tyb-logo.svg" alt="" /> TYB <span style="color:var(--accent)">(in progress)</span> <span class="card-go" aria-hidden="true">↗</span></h3>
             <p>Expense tracking, savings goals, and what-if projections. Currently deciding on the tech stack.</p>
-          </div>
+          </a>
           <div class="card up">
             <h3>A WhatsApp financial education community</h3>
             <p>Helping people understand mutual funds and personal finance, one message at a time.</p>
