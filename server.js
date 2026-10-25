@@ -30,6 +30,8 @@ http
           ? "image/svg+xml"
           : ext === ".png"
           ? "image/png"
+          : ext === ".pdf"
+          ? "application/pdf"
           : "application/octet-stream";
       res.writeHead(200, { "Content-Type": type });
       res.end(data);
